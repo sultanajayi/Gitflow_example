@@ -1,0 +1,5579 @@
+{
+	"info": {
+		"_postman_id": "2c893f52-5ea5-4367-8e31-243feb82a5ff",
+		"name": "XSnapCash QA Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26083026",
+		"_collection_link": "https://gold-sunset-757387.postman.co/workspace/Main~102c1234-a22b-4294-9cde-fc867ae09f01/collection/26083026-2c893f52-5ea5-4367-8e31-243feb82a5ff?action=share&source=collection_link&creator=26083026"
+	},
+	"item": [
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Onboarding",
+					"item": [
+						{
+							"name": "Initiate Onboarding - empty form",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Bank code is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.bank_code.message).to.eql(\"Bank code is not allowed to be empty\")\r",
+											"})\r",
+											"pm.test(\"Account number is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.account_number.message).to.eql(\"Account number is not allowed to be empty\")\r",
+											"})\r",
+											"pm.test(\"Phone number is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.phone_number.message).to.eql(\"Phone number is not allowed to be empty\")\r",
+											"\r",
+											"})\r",
+											"pm.test(\"Email is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.email.message).to.eql(\"Email is not allowed to be empty\")\r",
+											"\r",
+											"})\r",
+											"pm.test(\"Consent is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.consent.message).to.eql(\"Consent must be [true]\")\r",
+											"\r",
+											"})\r",
+											"pm.test(\"Street is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data[\"address.street\"].message).to.eql(\"Address.street is not allowed to be empty\")\r",
+											"\r",
+											"})\r",
+											"pm.test(\"City is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data[\"address.city\"].message).to.eql(\"Address.city is not allowed to be empty\")\r",
+											"})\r",
+											"pm.test(\"State is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data[\"address.state\"].message).to.eql(\"Address.state is not allowed to be empty\")\r",
+											"\r",
+											"})\r",
+											"pm.test(\"Landmark is required\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data[\"address.landmark\"].message).to.eql(\"Address.landmark is not allowed to be empty\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"\",\n    \"account_number\": \"\",\n    \"phone_number\": \"\",\n    \"consent\": \"\",\n    \"email\": \"\",\n    \"address\": {\n        \"street\": \"\",\n        \"city\": \"\",\n        \"state\": \"\",\n        \"landmark\": \"\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - Invalid data in account number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Invalid account number error \", function () {\r",
+											"\r",
+											"   pm.expect(resp.data.account_number.customErrorMessage).to.eql(\"Account number is invalid\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"000001\",\n    \"account_number\": \"abcde\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"true\",\n     \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - invalid data in phone number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Invalid data in phone number error \", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.phone_number.customErrorMessage).to.eql(\"Phone number is invalid\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"000001\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"abcde\",\n    \"consent\": \"true\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - Invalid data in bank code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Invalid bank code error \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"Invalid request data\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"abcde\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"+2348173106732\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"consent\": \"true\",\n    \"address\": {\n        \"street\": \"8 Abaeko Esatate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - bank code does not exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Bank code error message\", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"Invalid request data\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"99999\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"true\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - consent not given",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Consent not given\", function () {\r",
+											"   pm.expect(resp.data.consent.message).to.eql(\"Consent must be [true]\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"000001\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"false\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding - invalid data in consent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Invalid data in consent\", function () {\r",
+											"  pm.expect(resp.data.consent.message).to.eql(\"Consent must be [true]\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"000001\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"hahahaaha\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": []
+						},
+						{
+							"name": "Initiate Onboarding- Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Set signin token value\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"Auth_token\", jsonData.data.token);    \r",
+											"}); \r",
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding Initiation \", function () {\r",
+											"    pm.expect(resp.first_name).to.not.be.null\r",
+											"    pm.expect(resp.last_name).to.not.be.null\r",
+											"    pm.expect(resp.message).to.eql(\"Merchant successfully created\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWpheWlzdWx0YW4zOUBnbWFpbC5jb20iLCJpYXQiOjE2Nzk1MTUwMjcsImV4cCI6MTY3OTg3NTAyNywiaXNzIjoibGVuZHNxci5jb20ifQ.dm-zu4EtsKFq6tF_ovB0fXExJbUgCvOhljT86-hDnqw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank_code\": \"000006\",\n    \"account_number\": \"0002941420\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"true\",\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations"
+									]
+								},
+								"description": "Creates merchant profile as well as the merchant account on sterling. Also creates the user on the Pecunia using a background services"
+							},
+							"response": [
+								{
+									"name": "Create Merchant Profile",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-merchant",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer toekn",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"bank_code\": \"000013\",\n    \"account_number\": \"0237251706\",\n    \"phone\": \"+2348163047983\",\n    \"consent\": \"true\",\n    \"address\": {\n        \"street\": \"9 oluoshifeso street\",\n        \"city\": \"Yaba\",\n        \"state\": \"Lagos\",\n        \"landmark\": \"Unilag\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/merchants",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "22601"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"5849-8rDyJRsFkWUPgHs3lUY+jei6KIs\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 05 Mar 2023 15:58:09 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"Merchant successfully created\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Initial\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiIiLCJpYXQiOjE2Nzg0MzMxNzksImV4cCI6MTY3ODc5MzE3OSwiaXNzIjoibGVuZHNxci5jb20ifQ.VFAnNS56vpUdevrvIknboYBwQH9O1Ptm7FABAhd0nD0\"\n    }\n}"
+								},
+								{
+									"name": "Initiate Onboarding",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "{{x-org-key}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"bank_code\": \"000001\",\n    \"account_number\": \"0092104050\",\n    \"phone_number\": \"+2348173106732\",\n    \"consent\": \"true\",\n    \"address\": {\n        \"street\": \"8, Abaeko Estate\",\n        \"city\": \"Ibadan\",\n        \"state\": \"Oyo\",\n        \"landmark\": \"IITA\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants/registrations",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants",
+												"registrations"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 17 Mar 2023 09:53:05 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "202"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Server",
+											"value": "nginx/1.22.1"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"ca-pxVNRFzDNX3s/NkLKopfxQ2Y7dY\""
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": false,\n    \"error\": \"server_error\",\n    \"message\": \"We're not able to verify your image at this time. Please try again in 5 minutes\",\n    \"data\": {\n        \"code\": \"97\",\n        \"type\": \"Failure\",\n        \"message\": \"Something went wrong\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Image Verification - random non-matching image",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding error message \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"We're not able to verify your image at this time. Please try again in 5 minutes\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "D_MLF0hRS/image (12).png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations/uploads",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations",
+										"uploads"
+									]
+								},
+								"description": "Uploads merchant picture, also uses facial recognition to verify if the picture matches"
+							},
+							"response": [
+								{
+									"name": "Upload photot and complete SIgnup",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIyIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.bIpzVL2RdWDeXqwX1gWKIou2zvD4hyVxDyC21QTyqUs",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/Users/apple3/Pictures/official.jpg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants/onboarding/complete",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants",
+												"onboarding",
+												"complete"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "45"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"2d-qjGtKyiVUo5ARmGglYmiJr9jVKo\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 07 Mar 2023 08:05:29 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"image_url\": \"https://snapcash-lendsqr-test.s3.us-east-2.amazonaws.com/3PvWvFgMwWbuk7oyZR1xVuHUtWcDp6.jpg\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Image Verification  - no image",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding no image error message \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"Upload a file\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations/uploads",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations",
+										"uploads"
+									]
+								},
+								"description": "Uploads merchant picture, also uses facial recognition to verify if the picture matches"
+							},
+							"response": [
+								{
+									"name": "Upload photot and complete SIgnup",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIyIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.bIpzVL2RdWDeXqwX1gWKIou2zvD4hyVxDyC21QTyqUs",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/Users/apple3/Pictures/official.jpg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants/onboarding/complete",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants",
+												"onboarding",
+												"complete"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "45"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"2d-qjGtKyiVUo5ARmGglYmiJr9jVKo\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 07 Mar 2023 08:05:29 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"image_url\": \"https://snapcash-lendsqr-test.s3.us-east-2.amazonaws.com/3PvWvFgMwWbuk7oyZR1xVuHUtWcDp6.jpg\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Image Verification - success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding success message \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"success\")\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Status : true\", function () {\r",
+											"\r",
+											"    pm.expect(resp.status).to.eql(true)\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Onboard status : Account Creation\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.onboard_status).to.eql(\"account creation\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "NESN9wGOs/Sultan.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations/uploads",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations",
+										"uploads"
+									]
+								},
+								"description": "Uploads merchant picture, also uses facial recognition to verify if the picture matches"
+							},
+							"response": [
+								{
+									"name": "Upload photot and complete SIgnup",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIyIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.bIpzVL2RdWDeXqwX1gWKIou2zvD4hyVxDyC21QTyqUs",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/Users/apple3/Pictures/official.jpg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants/onboarding/complete",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants",
+												"onboarding",
+												"complete"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "45"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"2d-qjGtKyiVUo5ARmGglYmiJr9jVKo\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 07 Mar 2023 08:05:29 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"image_url\": \"https://snapcash-lendsqr-test.s3.us-east-2.amazonaws.com/3PvWvFgMwWbuk7oyZR1xVuHUtWcDp6.jpg\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Create Merchant Account",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding success message \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"success\")\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Status : true\", function () {\r",
+											"\r",
+											"    pm.expect(resp.status).to.eql(true)\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Onboard status : Account Creation\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.onboard_status).to.eql(\"completed\")\r",
+											"\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Auth_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/registrations/accounts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"registrations",
+										"accounts"
+									]
+								},
+								"description": "Uploads merchant picture, also uses facial recognition to verify if the picture matches"
+							},
+							"response": [
+								{
+									"name": "Create Merchant Account",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{bearer_token}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants/registrations/accounts",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants",
+												"registrations",
+												"accounts"
+											]
+										}
+									},
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"name": "Content-Type",
+											"description": "",
+											"type": "text"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 3,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"chigozie@test.com\",\n        \"image_url\": \"https://snapcash-lendsqr-test.s3.us-east-2.amazonaws.com/fOewckorEIiEsycdETOc7Qp06xUMwM.jpg\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"completed\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Login Token [Test] Empty email field",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)",
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Email is required\", function () {",
+											"",
+											"    pm.expect(resp.data.email.message).to.eql(\"Email is not allowed to be empty\")",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"login"
+									]
+								},
+								"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+							},
+							"response": [
+								{
+									"name": "Get Merchant",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "446"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1be-ZzK5uoqn7l5CaKTbKom3KN0D9cg\""
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 08 Mar 2023 20:58:59 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"onboard_status\": \"complete\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0Mi5jb20iLCJpYXQiOjE2Nzg5NjEyODMsImV4cCI6MTY3OTMyMTI4MywiaXNzIjoibGVuZHNxci5jb20ifQ.ROGfGcv83WUtBZjNiKPYOInNHP2_rcclbLKknLUBlR8\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Login Token [Test] Invalid data in email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)",
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Email is required\", function () {",
+											"",
+											"    pm.expect(resp.data.email.message).to.eql(\"Email must be a valid email\")",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"chigozietest\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"login"
+									]
+								},
+								"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+							},
+							"response": [
+								{
+									"name": "Get Merchant",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "446"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1be-ZzK5uoqn7l5CaKTbKom3KN0D9cg\""
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 08 Mar 2023 20:58:59 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"onboard_status\": \"complete\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0Mi5jb20iLCJpYXQiOjE2Nzg5NjEyODMsImV4cCI6MTY3OTMyMTI4MywiaXNzIjoibGVuZHNxci5jb20ifQ.ROGfGcv83WUtBZjNiKPYOInNHP2_rcclbLKknLUBlR8\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Login Token [Test] Unregistered email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resp = JSON.parse(responseBody)",
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Unregistered email\", function () {",
+											"",
+											"    pm.expect(resp.data.email.message).to.eql(\"Merchant with that email does not exist\")",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"chig@test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"login"
+									]
+								},
+								"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+							},
+							"response": [
+								{
+									"name": "Get Merchant",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "446"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1be-ZzK5uoqn7l5CaKTbKom3KN0D9cg\""
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 08 Mar 2023 20:58:59 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"onboard_status\": \"complete\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0Mi5jb20iLCJpYXQiOjE2Nzg5NjEyODMsImV4cCI6MTY3OTMyMTI4MywiaXNzIjoibGVuZHNxci5jb20ifQ.ROGfGcv83WUtBZjNiKPYOInNHP2_rcclbLKknLUBlR8\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Login Token [Test] Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Set signin token value\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"bearer_token\", jsonData.data.token);    \r",
+											"}); \r",
+											"\r",
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"\r",
+											"pm.test(\"Successful login\", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"success\")\r",
+											"});\r",
+											"var resp = JSON.parse(responseBody)\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Onboarding success message \", function () {\r",
+											"\r",
+											"    pm.expect(resp.message).to.eql(\"success\")\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Status : true\", function () {\r",
+											"\r",
+											"    pm.expect(resp.status).to.eql(true)\r",
+											"\r",
+											"});\r",
+											"pm.test(\"Onboard status : Account Creation\", function () {\r",
+											"\r",
+											"    pm.expect(resp.data.onboard_status).to.eql(\"completed\")\r",
+											"\r",
+											"})\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{x-api-key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"ajayisultan39@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"login"
+									]
+								},
+								"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+							},
+							"response": [
+								{
+									"name": "Get Merchant",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-org-key",
+												"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{base_url}}/api/v1/merchants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"merchants"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "446"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1be-ZzK5uoqn7l5CaKTbKom3KN0D9cg\""
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 08 Mar 2023 20:58:59 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"onboard_status\": \"complete\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0Mi5jb20iLCJpYXQiOjE2Nzg5NjEyODMsImV4cCI6MTY3OTMyMTI4MywiaXNzIjoibGVuZHNxci5jb20ifQ.ROGfGcv83WUtBZjNiKPYOInNHP2_rcclbLKknLUBlR8\"\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Get Merchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set  account number value\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"account_number\", jsonData.data.bank_account.account_number);    \r",
+									"});\r",
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get Merchant Account \", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Get Merchant",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "446"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1be-ZzK5uoqn7l5CaKTbKom3KN0D9cg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 Mar 2023 20:58:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"chigozie@test2.com\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true,\n        \"address\": {\n            \"city\": \"yaba\",\n            \"state\": \"Ogun\",\n            \"street\": \"My street\",\n            \"landmark\": \"unilag\"\n        },\n        \"bank_account\": {\n            \"account_name\": \"ADEYEMO DAMOLA\",\n            \"account_number\": \"0092103778\",\n            \"bank_name\": \"Sterling Bank Plc\",\n            \"bank_code\": \"000001\",\n            \"available_balance\": \"0.00\",\n            \"hold_balance\": \"0.00\",\n            \"ledger_balance\": \"0.00\",\n            \"last_sync_time\": \"2023-03-10T07:26:21.000Z\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Generate OTP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set OTP token value\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"otp\", jsonData.data.token);    \r",
+									"}); \r",
+									"\r",
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Generate OTP\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"Otp successfully sent\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"verification_type\": \"phone_number\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/otp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"otp"
+							]
+						},
+						"description": "sends verification otp to merchant. verification_type is `phone_number`"
+					},
+					"response": [
+						{
+							"name": "Generate OTP",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"verification_type\": \"phone_number\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/verifications/otp",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"verifications",
+										"otp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "73"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"49-1U7y3wn9imOLRIWbuXZTkDUbwOM\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:40:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Otp successfully sent\",\n    \"data\": {\n        \"token\": \"4564\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - No phone number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Phone number error message is returned\", function () {",
+									"",
+									"    pm.expect(resp.data.phone_number.message).to.eql(\"Phone number is not allowed to be empty\")",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{otp}}\",\n    \"phone_number\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - No token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"No token error message is returned\", function () {",
+									"",
+									"    pm.expect(resp.data.token.message).to.eql(\"Token is not allowed to be empty\")",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - invalid phone number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid phone number error message is returned\", function () {\r",
+									"\r",
+									"    pm.expect(resp.data.phone_number.customErrorMessage).to.eql(\"Phone number is invalid\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{otp}}\",\n    \"phone_number\": \"abcd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid token error message is returned\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"Otp is invalid\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"abcd\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - token too long",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\" Token too long\", function () {\r",
+									"\r",
+									"    pm.expect(resp.data.token.customErrorMessage).to.eql(\"Token should only be 4 characters, no less, no more\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"123456\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - token too short",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token too short error message is returned\", function () {\r",
+									"\r",
+									"    pm.expect(resp.data.token.customErrorMessage).to.eql(\"Token should only be 4 characters, no less, no more\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"12\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - Wrong OTP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Wrong OTP error message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"Otp is invalid\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"8592\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number-Successful",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Phone number verified success message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{otp}}\",\n    \"phone_number\": \"+2348173106732\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Merchant Phone Number - number already verified",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Phone number already verified\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"Phone number is already verified\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{otp}}\",\n    \"phone_number\": \"+2347088577290\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants",
+								"verifications",
+								"phone"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Verify Merchant Phone Number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"3931\",\n    \"phone_number\": \"+2348163047983\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants/verifications/phone",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants",
+										"verifications",
+										"phone"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "180"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b4-C9jD946UzxZFeph8CJecMBq4sIo\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 17:53:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"NORBERT\",\n        \"last_name\": \"MADUBUKO\",\n        \"email\": \"\",\n        \"phone_number\": \"+2348163047983\",\n        \"gender\": \"Male\",\n        \"onboard_status\": \"Complete\",\n        \"verified_phone\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Merchant Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update profile success message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ajayisultan39@gmail.com\",\n    \"address\": {\n        \"street\": \"My Street\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"Ogun\",\n        \"landmark\": \"unilag\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Update Merchant Profile",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "basic MTIzNDU6cGFzc3dvcmQ=",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"chigozie@test2.com\",\n    \"address\": {\n        \"street\": \"My street\",\n        \"city\": \"yaba\",\n        \"state\": \"Ogun\",\n        \"landmark\": \"unilag\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "162"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a2-E/9pwfkcGhN/rfqCoChCJBQbwao\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 14:38:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"email\": \"chigozie@test2.com\",\n        \"address\": {\n            \"street\": \"My street\",\n            \"city\": \"yaba\",\n            \"state\": \"Ogun\",\n            \"landmark\": \"unilag\"\n        }\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "APIs to manage merchant profile"
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Get Accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set settlement account number value\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"settlement_account_number\", jsonData.data[0].account_number);    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/accounts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts"
+							]
+						},
+						"description": "Gets merchant transactions from sterling, also caches the result in snapchat transaction table"
+					},
+					"response": [
+						{
+							"name": "Get Accounts",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/accounts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "585"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"249-W5EzRj41rWalPAz2h3M/y1Mu5y0\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Mar 2023 16:30:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"type\": \"user\",\n            \"account_name\": \"MADUBUKO NORBERT CHIGOZIE\",\n            \"bank_name\": \"\",\n            \"account_number\": \"0237251706\",\n            \"bank_code\": \"000013\",\n            \"kyc_tier\": \"2\",\n            \"ledger_balance\": \"0.00\",\n            \"available_balance\": \"0.00\",\n            \"hold_balance\": \"0.00\",\n            \"last_sync_time\": null,\n            \"status\": \"active\"\n        },\n        {\n            \"type\": \"merchant\",\n            \"account_name\": \"NORBERT  MADUBUKO\",\n            \"bank_name\": \"Sterling Bank Plc\",\n            \"account_number\": \"0092104593\",\n            \"bank_code\": \"000001\",\n            \"kyc_tier\": \"1\",\n            \"ledger_balance\": \"0.00\",\n            \"available_balance\": \"0.00\",\n            \"hold_balance\": \"0.00\",\n            \"last_sync_time\": \"2023-03-22T15:45:42.000Z\",\n            \"status\": \"active\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Transfer - no narration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No narration error message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.00,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - invalid data in amount field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid data error message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": \"ab2kr\",\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - bank code does not exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Bank code error message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.00,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"00000000000\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - invalid data in source account number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid account number message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhamF5aXN1bHRhbjM5QGdtYWlsLmNvbSIsImlhdCI6MTY3OTMyMjQ5OCwiZXhwIjoxNjc5NjgyNDk4LCJpc3MiOiJsZW5kc3FyLmNvbSJ9.1qEwGoaZQGA6WTxf6drRfkteF1PN3BaZp6jUJliBdmM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.00,\n    \"source_account_number\":\"avbdbd\",\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{collection_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - invalid data in destination account number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid destination error message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.00,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": \"123op\",\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - zero amount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"zero amount  message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 0,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - amount more than 2 decimal places",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Amount error message\", function () {\r",
+									"\r",
+									"     pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.78909888,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer - negative amount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Negative amount error message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.error).to.eql(\"bad_request\")\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": -2000.00,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer- Sucessful",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set transaction_reference value\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"transaction_reference\", jsonData.data.reference);    \r",
+									"});\r",
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Transfer success message\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"Yaay Transfer Successful\")\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhamF5aXN1bHRhbjM5QGdtYWlsLmNvbSIsImlhdCI6MTY3OTMzMjE3NCwiZXhwIjoxNjc5NjkyMTc0LCJpc3MiOiJsZW5kc3FyLmNvbSJ9.3wVTqjQx2SBDDDVPZc1VeLhzCLOQxRfODn5JHx5xJVs",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2000.00,\n    \"source_account_number\":{{account_number}},\n    \"destination_bank_code\": \"000007\",\n    \"destination_account_number\": {{settlement_account_number}},\n    \"narration\": \"First Transfer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get Transaction\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhamF5aXN1bHRhbjM5QGdtYWlsLmNvbSIsImlhdCI6MTY3OTMzMjE3NCwiZXhwIjoxNjc5NjkyMTc0LCJpc3MiOiJsZW5kc3FyLmNvbSJ9.3wVTqjQx2SBDDDVPZc1VeLhzCLOQxRfODn5JHx5xJVs",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions?type=debit&start_date=2023-04-02&end_date=2023-05-23",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "debit"
+								},
+								{
+									"key": "start_date",
+									"value": "2023-04-02"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-05-23"
+								}
+							]
+						},
+						"description": "Gets merchant transactions from sterling, also caches the result in snapchat transaction table"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get Transaction\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhamF5aXN1bHRhbjM5QGdtYWlsLmNvbSIsImlhdCI6MTY3OTMzMjE3NCwiZXhwIjoxNjc5NjkyMTc0LCJpc3MiOiJsZW5kc3FyLmNvbSJ9.3wVTqjQx2SBDDDVPZc1VeLhzCLOQxRfODn5JHx5xJVs",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/:reference",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								":reference"
+							],
+							"variable": [
+								{
+									"key": "reference",
+									"value": "{{transaction_reference}}"
+								}
+							]
+						},
+						"description": "get transaction details"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction Analystics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get Transaction\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImVtYWlsIjoiYWpheWlzdWx0YW4zOUBnbWFpbC5jb20iLCJpYXQiOjE2Nzk1NjE5NjEsImV4cCI6MTY3OTkyMTk2MSwiaXNzIjoibGVuZHNxci5jb20ifQ.pX0_pLljzAIQWW1kvc_0Uc-1JUHoqkvVhjP6FcJm5j4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/analytics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"analytics"
+							]
+						},
+						"description": "get transaction statistics"
+					},
+					"response": [
+						{
+							"name": "Get Transaction Analystics",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/transactions/analytics",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"analytics"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "104"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"68-vv0eNeS4n3nMSXYCiWQGXFZvKXk\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 15 Mar 2023 23:55:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {\n        \"total_debit_amount\": \"200.00\",\n        \"total_credit_amount\": \"1245.43\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Transfer Fees",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"transaction_amount\": 50000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/transfers/fees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transfers",
+								"fees"
+							]
+						},
+						"description": "initiates bank transfer"
+					},
+					"response": []
+				}
+			],
+			"description": "Merchant Transactions"
+		},
+		{
+			"name": "Others",
+			"item": [
+				{
+					"name": "QR code Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"QR code webhook\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"SenderName\": \"AYEGBUSI OLUSINA EMMANUEL\",\n  \"SenderBankCode\": \"999232\",\n  \"Amount\": 2000.43,\n  \"CurrencyCode\": \"NGN\",\n  \"CreditAccount\": \"0092104050\",\n  \"TransactionDate\": \"2023-02-12T21:51:48\",\n  \"PaymentReference\": \"NQR/202211205132266110009112022013030\",\n  \"Remark\": \"Qr Code Payment\",\n  \"StatusCode\": \"00\",\n  \"DebitAccount\": \"0004240405\",\n  \"DestinationBankCode\": \"999232\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/webhooks/qrcodes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"qrcodes"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "QR code Webhook",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"SenderName\": \"AYEGBUSI OLUSINA EMMANUEL\",\n  \"SenderBankCode\": \"999232\",\n  \"Amount\": 1245.43,\n  \"CurrencyCode\": \"NGN\",\n  \"CreditAccount\": \"0092104593\",\n  \"TransactionDate\": \"2023-02-12T21:51:48\",\n  \"PaymentReference\": \"NQR/202211205132266110009112022013038\",\n  \"Remark\": \"Qr Code Payment\",\n  \"StatusCode\": \"00\",\n  \"DebitAccount\": \"0004240405\",\n  \"DestinationBankCode\": \"999232\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/webhooks/qrcodes",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"webhooks",
+										"qrcodes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "45"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2d-qjGtKyiVUo5ARmGglYmiJr9jVKo\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 15 Mar 2023 23:07:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": {}\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Collection\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/utils/collections?type=state",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"utils",
+								"collections"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "state"
+								}
+							]
+						},
+						"description": "get states"
+					},
+					"response": [
+						{
+							"name": "Get Banks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/utils/collections?type=bank",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"utils",
+										"collections"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "bank"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "6671"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a0f-I5YRP+1ZeTcB2DoY2ofLlFSTOVE\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Mar 2023 18:16:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"name\": \"Access Bank\",\n            \"bank_code\": \"044\",\n            \"nibss_code\": \"000014\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/044.png\"\n        },\n        {\n            \"name\": \"Alat by Wema\",\n            \"bank_code\": \"035\",\n            \"nibss_code\": \"000017\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/035A.png\"\n        },\n        {\n            \"name\": \"ASO Savings and Loans\",\n            \"bank_code\": \"401\",\n            \"nibss_code\": \"090001\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/401.png\"\n        },\n        {\n            \"name\": \"CEMCS Microfinance Bank\",\n            \"bank_code\": \"50823\",\n            \"nibss_code\": \"090154\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/50823.png\"\n        },\n        {\n            \"name\": \"Citibank Nigeria\",\n            \"bank_code\": \"023\",\n            \"nibss_code\": \"000009\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/023.png\"\n        },\n        {\n            \"name\": \"Coronation Merchant Bank\",\n            \"bank_code\": \"559\",\n            \"nibss_code\": \"060001\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/902.png\"\n        },\n        {\n            \"name\": \"Ecobank Nigeria\",\n            \"bank_code\": \"050\",\n            \"nibss_code\": \"000010\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/050.png\"\n        },\n        {\n            \"name\": \"Ekondo Microfinance Bank\",\n            \"bank_code\": \"562\",\n            \"nibss_code\": \"090097\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/562.png\"\n        },\n        {\n            \"name\": \"FBNQuest Merchant Bank\",\n            \"bank_code\": \"911\",\n            \"nibss_code\": \"060002\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/911.png\"\n        },\n        {\n            \"name\": \"Fidelity Bank\",\n            \"bank_code\": \"070\",\n            \"nibss_code\": \"000007\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/070.png\"\n        },\n        {\n            \"name\": \"First Bank of Nigeria\",\n            \"bank_code\": \"011\",\n            \"nibss_code\": \"000016\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/011.png\"\n        },\n        {\n            \"name\": \"First City Monument Bank\",\n            \"bank_code\": \"214\",\n            \"nibss_code\": \"000003\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/214.png\"\n        },\n        {\n            \"name\": \"FSDH Merchant Bank\",\n            \"bank_code\": \"501\",\n            \"nibss_code\": \"400001\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/501.png\"\n        },\n        {\n            \"name\": \"Globus Bank\",\n            \"bank_code\": \"103\",\n            \"nibss_code\": \"000027\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/103.png\"\n        },\n        {\n            \"name\": \"Guaranty Trust Bank\",\n            \"bank_code\": \"058\",\n            \"nibss_code\": \"000013\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/058.png\"\n        },\n        {\n            \"name\": \"Hasal Microfinance Bank\",\n            \"bank_code\": \"50383\",\n            \"nibss_code\": \"090121\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/50383.png\"\n        },\n        {\n            \"name\": \"Heritage Bank\",\n            \"bank_code\": \"030\",\n            \"nibss_code\": \"000020\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/030.png\"\n        },\n        {\n            \"name\": \"Jaiz Bank\",\n            \"bank_code\": \"301\",\n            \"nibss_code\": \"000006\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/301.png\"\n        },\n        {\n            \"name\": \"Keystone Bank\",\n            \"bank_code\": \"082\",\n            \"nibss_code\": \"000002\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/082.png\"\n        },\n        {\n            \"name\": \"Kuda Bank\",\n            \"bank_code\": \"50211\",\n            \"nibss_code\": \"090267\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/50211.png\"\n        },\n        {\n            \"name\": \"Nova Merchant Bank\",\n            \"bank_code\": \"561\",\n            \"nibss_code\": \"060003\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/561.png\"\n        },\n        {\n            \"name\": \"One Finance\",\n            \"bank_code\": \"565\",\n            \"nibss_code\": \"100026\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/565.png\"\n        },\n        {\n            \"name\": \"Parallex Bank\",\n            \"bank_code\": \"526\",\n            \"nibss_code\": \"090004\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/526.png\"\n        },\n        {\n            \"name\": \"Polaris Bank\",\n            \"bank_code\": \"076\",\n            \"nibss_code\": \"000008\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/076.png\"\n        },\n        {\n            \"name\": \"Providus Bank\",\n            \"bank_code\": \"101\",\n            \"nibss_code\": \"000023\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/101.png\"\n        },\n        {\n            \"name\": \"Rand Merchant Bank Nigeria\",\n            \"bank_code\": \"502\",\n            \"nibss_code\": \"000024\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/502.png\"\n        },\n        {\n            \"name\": \"Rubies MFB\",\n            \"bank_code\": \"125\",\n            \"nibss_code\": \"090175\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/125.png\"\n        },\n        {\n            \"name\": \"Sparkle Microfinance Bank\",\n            \"bank_code\": \"51310\",\n            \"nibss_code\": \"090325\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/51310.png\"\n        },\n        {\n            \"name\": \"Stanbic IBTC Bank\",\n            \"bank_code\": \"221\",\n            \"nibss_code\": \"000012\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/221.png\"\n        },\n        {\n            \"name\": \"Standard Chartered Bank\",\n            \"bank_code\": \"068\",\n            \"nibss_code\": \"000021\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/068.png\"\n        },\n        {\n            \"name\": \"Sterling Bank\",\n            \"bank_code\": \"232\",\n            \"nibss_code\": \"000001\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/232.png\"\n        },\n        {\n            \"name\": \"Suntrust Bank\",\n            \"bank_code\": \"100\",\n            \"nibss_code\": \"000022\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/100.png\"\n        },\n        {\n            \"name\": \"TAJ Bank\",\n            \"bank_code\": \"302\",\n            \"nibss_code\": \"000026\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/302.png\"\n        },\n        {\n            \"name\": \"TCF MFB\",\n            \"bank_code\": \"51211\",\n            \"nibss_code\": \"090115\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/51211.png\"\n        },\n        {\n            \"name\": \"Titan Trust Bank\",\n            \"bank_code\": \"102\",\n            \"nibss_code\": \"000025\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/102.png\"\n        },\n        {\n            \"name\": \"Union Bank of Nigeria\",\n            \"bank_code\": \"032\",\n            \"nibss_code\": \"000018\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/032.png\"\n        },\n        {\n            \"name\": \"United Bank For Africa\",\n            \"bank_code\": \"033\",\n            \"nibss_code\": \"000004\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/033.png\"\n        },\n        {\n            \"name\": \"Unity Bank\",\n            \"bank_code\": \"215\",\n            \"nibss_code\": \"000011\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/215.png\"\n        },\n        {\n            \"name\": \"VFD\",\n            \"bank_code\": \"566\",\n            \"nibss_code\": \"090110\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/566.png\"\n        },\n        {\n            \"name\": \"Wema Bank\",\n            \"bank_code\": \"035\",\n            \"nibss_code\": \"000017\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/035.png\"\n        },\n        {\n            \"name\": \"Zenith Bank\",\n            \"bank_code\": \"057\",\n            \"nibss_code\": \"000015\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/bank_logos/057.png\"\n        },\n        {\n            \"name\": \"Conpro MFB (Kredi Bank)\",\n            \"bank_code\": \"50200\",\n            \"nibss_code\": \"090380\",\n            \"logo\": \"https://lendstack-s3.s3.us-east-2.amazonaws.com/kredibank.jpeg\"\n        },\n        {\n            \"name\": \"paycom (Opay)\",\n            \"bank_code\": \"305\",\n            \"nibss_code\": \"100004\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"Palmpay\",\n            \"bank_code\": \"646\",\n            \"nibss_code\": \"100033\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"Carbon\",\n            \"bank_code\": \"565\",\n            \"nibss_code\": \"100026\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"Dot pay\",\n            \"bank_code\": null,\n            \"nibss_code\": \"090470\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"3line\",\n            \"bank_code\": null,\n            \"nibss_code\": \"110005\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"Support MFB\",\n            \"bank_code\": \"295\",\n            \"nibss_code\": \"090446\",\n            \"logo\": null\n        },\n        {\n            \"name\": \"Firmus MFB\",\n            \"bank_code\": \"51314\",\n            \"nibss_code\": \"090366\",\n            \"logo\": \"https://www.firmusmfb.com/wp-content/uploads/2021/02/logo2.png\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Get State",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/utils/collections?type=state",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"utils",
+										"collections"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "state"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1273"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4f9-pmZRmNFqyBB82tqdKUm2Dd0mNjE\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Mar 2023 18:20:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"name\": \"Abuja Federal Capital Territory\",\n            \"code\": \"NG-FC\"\n        },\n        {\n            \"name\": \"Abia\",\n            \"code\": \"NG-AB\"\n        },\n        {\n            \"name\": \"Adamawa\",\n            \"code\": \"NG-AD\"\n        },\n        {\n            \"name\": \"Akwa Ibom\",\n            \"code\": \"NG-AK\"\n        },\n        {\n            \"name\": \"Anambra\",\n            \"code\": \"NG-AN\"\n        },\n        {\n            \"name\": \"Bauchi\",\n            \"code\": \"NG-BA\"\n        },\n        {\n            \"name\": \"Bayelsa\",\n            \"code\": \"NG-BY\"\n        },\n        {\n            \"name\": \"Benue\",\n            \"code\": \"NG-BE\"\n        },\n        {\n            \"name\": \"Borno\",\n            \"code\": \"NG-BO\"\n        },\n        {\n            \"name\": \"Cross River\",\n            \"code\": \"NG-CR\"\n        },\n        {\n            \"name\": \"Delta\",\n            \"code\": \"NG-DE\"\n        },\n        {\n            \"name\": \"Ebonyi\",\n            \"code\": \"NG-EB\"\n        },\n        {\n            \"name\": \"Edo\",\n            \"code\": \"NG-ED\"\n        },\n        {\n            \"name\": \"Ekiti\",\n            \"code\": \"NG-EK\"\n        },\n        {\n            \"name\": \"Enugu\",\n            \"code\": \"NG-EN\"\n        },\n        {\n            \"name\": \"Gombe\",\n            \"code\": \"NG-GO\"\n        },\n        {\n            \"name\": \"Imo\",\n            \"code\": \"NG-IM\"\n        },\n        {\n            \"name\": \"Jigawa\",\n            \"code\": \"NG-JI\"\n        },\n        {\n            \"name\": \"Kaduna\",\n            \"code\": \"NG-KD\"\n        },\n        {\n            \"name\": \"Kano\",\n            \"code\": \"NG-KN\"\n        },\n        {\n            \"name\": \"Katsina\",\n            \"code\": \"NG-KT\"\n        },\n        {\n            \"name\": \"Kebbi\",\n            \"code\": \"NG-KE\"\n        },\n        {\n            \"name\": \"Kogi\",\n            \"code\": \"NG-KO\"\n        },\n        {\n            \"name\": \"Kwara\",\n            \"code\": \"NG-KW\"\n        },\n        {\n            \"name\": \"Lagos\",\n            \"code\": \"NG-LA\"\n        },\n        {\n            \"name\": \"Nasarawa\",\n            \"code\": \"NG-NA\"\n        },\n        {\n            \"name\": \"Niger\",\n            \"code\": \"NG-NI\"\n        },\n        {\n            \"name\": \"Ogun\",\n            \"code\": \"NG-OG\"\n        },\n        {\n            \"name\": \"Ondo\",\n            \"code\": \"NG-ON\"\n        },\n        {\n            \"name\": \"Osun\",\n            \"code\": \"NG-OS\"\n        },\n        {\n            \"name\": \"Oyo\",\n            \"code\": \"NG-OY\"\n        },\n        {\n            \"name\": \"Plateau\",\n            \"code\": \"NG-PL\"\n        },\n        {\n            \"name\": \"Rivers\",\n            \"code\": \"NG-RI\"\n        },\n        {\n            \"name\": \"Sokoto\",\n            \"code\": \"NG-SO\"\n        },\n        {\n            \"name\": \"Taraba\",\n            \"code\": \"NG-TA\"\n        },\n        {\n            \"name\": \"Yobe\",\n            \"code\": \"NG-YO\"\n        },\n        {\n            \"name\": \"Zamfara\",\n            \"code\": \"NG-ZA\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Country",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/utils/collections?type=country",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"utils",
+										"collections"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "country"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "8673"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21e1-awJa+RK7CIUlpODeJ3ObvtioogA\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Mar 2023 18:26:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"name\": \"Afghanistan\",\n            \"code\": \"AF\"\n        },\n        {\n            \"name\": \"Aland Islands\",\n            \"code\": \"AX\"\n        },\n        {\n            \"name\": \"Albania\",\n            \"code\": \"AL\"\n        },\n        {\n            \"name\": \"Algeria\",\n            \"code\": \"DZ\"\n        },\n        {\n            \"name\": \"American Samoa\",\n            \"code\": \"AS\"\n        },\n        {\n            \"name\": \"Andorra\",\n            \"code\": \"AD\"\n        },\n        {\n            \"name\": \"Angola\",\n            \"code\": \"AO\"\n        },\n        {\n            \"name\": \"Anguilla\",\n            \"code\": \"AI\"\n        },\n        {\n            \"name\": \"Antarctica\",\n            \"code\": \"AQ\"\n        },\n        {\n            \"name\": \"Antigua and Barbuda\",\n            \"code\": \"AG\"\n        },\n        {\n            \"name\": \"Argentina\",\n            \"code\": \"AR\"\n        },\n        {\n            \"name\": \"Armenia\",\n            \"code\": \"AM\"\n        },\n        {\n            \"name\": \"Aruba\",\n            \"code\": \"AW\"\n        },\n        {\n            \"name\": \"Australia\",\n            \"code\": \"AU\"\n        },\n        {\n            \"name\": \"Austria\",\n            \"code\": \"AT\"\n        },\n        {\n            \"name\": \"Azerbaijan\",\n            \"code\": \"AZ\"\n        },\n        {\n            \"name\": \"Bahrain\",\n            \"code\": \"BH\"\n        },\n        {\n            \"name\": \"Bahamas\",\n            \"code\": \"BS\"\n        },\n        {\n            \"name\": \"Bangladesh\",\n            \"code\": \"BD\"\n        },\n        {\n            \"name\": \"Barbados\",\n            \"code\": \"BB\"\n        },\n        {\n            \"name\": \"Belarus\",\n            \"code\": \"BY\"\n        },\n        {\n            \"name\": \"Belgium\",\n            \"code\": \"BE\"\n        },\n        {\n            \"name\": \"Belize\",\n            \"code\": \"BZ\"\n        },\n        {\n            \"name\": \"Benin\",\n            \"code\": \"BJ\"\n        },\n        {\n            \"name\": \"Bermuda\",\n            \"code\": \"BM\"\n        },\n        {\n            \"name\": \"Bhutan\",\n            \"code\": \"BT\"\n        },\n        {\n            \"name\": \"Bolivia\",\n            \"code\": \"BO\"\n        },\n        {\n            \"name\": \"Bonaire, Sint Eustatius and Saba\",\n            \"code\": \"BQ\"\n        },\n        {\n            \"name\": \"Bosnia and Herzegovina\",\n            \"code\": \"BA\"\n        },\n        {\n            \"name\": \"Botswana\",\n            \"code\": \"BW\"\n        },\n        {\n            \"name\": \"Bouvet Island\",\n            \"code\": \"BV\"\n        },\n        {\n            \"name\": \"Brazil\",\n            \"code\": \"BR\"\n        },\n        {\n            \"name\": \"British Indian Ocean Territory\",\n            \"code\": \"IO\"\n        },\n        {\n            \"name\": \"Brunei Darussalam\",\n            \"code\": \"BN\"\n        },\n        {\n            \"name\": \"Bulgaria\",\n            \"code\": \"BG\"\n        },\n        {\n            \"name\": \"Burkina Faso\",\n            \"code\": \"BF\"\n        },\n        {\n            \"name\": \"Burundi\",\n            \"code\": \"BI\"\n        },\n        {\n            \"name\": \"Cambodia\",\n            \"code\": \"KH\"\n        },\n        {\n            \"name\": \"Cameroon\",\n            \"code\": \"CM\"\n        },\n        {\n            \"name\": \"Canada\",\n            \"code\": \"CA\"\n        },\n        {\n            \"name\": \"Cape Verde\",\n            \"code\": \"CV\"\n        },\n        {\n            \"name\": \"Cayman Islands\",\n            \"code\": \"KY\"\n        },\n        {\n            \"name\": \"Central African Republic\",\n            \"code\": \"CF\"\n        },\n        {\n            \"name\": \"Chad\",\n            \"code\": \"TD\"\n        },\n        {\n            \"name\": \"Chile\",\n            \"code\": \"CL\"\n        },\n        {\n            \"name\": \"China\",\n            \"code\": \"CN\"\n        },\n        {\n            \"name\": \"Christmas Island\",\n            \"code\": \"CX\"\n        },\n        {\n            \"name\": \"Cocos (Keeling) Islands\",\n            \"code\": \"CC\"\n        },\n        {\n            \"name\": \"Colombia\",\n            \"code\": \"CO\"\n        },\n        {\n            \"name\": \"Comoros\",\n            \"code\": \"KM\"\n        },\n        {\n            \"name\": \"Republic of the Congo\",\n            \"code\": \"CG\"\n        },\n        {\n            \"name\": \"Democratic Republic of the Congo\",\n            \"code\": \"CD\"\n        },\n        {\n            \"name\": \"Cook Islands\",\n            \"code\": \"CK\"\n        },\n        {\n            \"name\": \"Costa Rica\",\n            \"code\": \"CR\"\n        },\n        {\n            \"name\": \"Cote d'Ivoire\",\n            \"code\": \"CI\"\n        },\n        {\n            \"name\": \"Croatia\",\n            \"code\": \"HR\"\n        },\n        {\n            \"name\": \"Cuba\",\n            \"code\": \"CU\"\n        },\n        {\n            \"name\": \"Curacao\",\n            \"code\": \"CW\"\n        },\n        {\n            \"name\": \"Cyprus\",\n            \"code\": \"CY\"\n        },\n        {\n            \"name\": \"Czech Republic\",\n            \"code\": \"CZ\"\n        },\n        {\n            \"name\": \"Denmark\",\n            \"code\": \"DK\"\n        },\n        {\n            \"name\": \"Djibouti\",\n            \"code\": \"DJ\"\n        },\n        {\n            \"name\": \"Dominica\",\n            \"code\": \"DM\"\n        },\n        {\n            \"name\": \"Dominican Republic\",\n            \"code\": \"DO\"\n        },\n        {\n            \"name\": \"Ecuador\",\n            \"code\": \"EC\"\n        },\n        {\n            \"name\": \"Egypt\",\n            \"code\": \"EG\"\n        },\n        {\n            \"name\": \"El Salvador\",\n            \"code\": \"SV\"\n        },\n        {\n            \"name\": \"Equatorial Guinea\",\n            \"code\": \"GQ\"\n        },\n        {\n            \"name\": \"Eritrea\",\n            \"code\": \"ER\"\n        },\n        {\n            \"name\": \"Estonia\",\n            \"code\": \"EE\"\n        },\n        {\n            \"name\": \"Ethiopia\",\n            \"code\": \"ET\"\n        },\n        {\n            \"name\": \"Falkland Islands (Malvinas)\",\n            \"code\": \"FK\"\n        },\n        {\n            \"name\": \"Faroe Islands\",\n            \"code\": \"FO\"\n        },\n        {\n            \"name\": \"Fiji\",\n            \"code\": \"FJ\"\n        },\n        {\n            \"name\": \"Finland\",\n            \"code\": \"FI\"\n        },\n        {\n            \"name\": \"France\",\n            \"code\": \"FR\"\n        },\n        {\n            \"name\": \"French Guiana\",\n            \"code\": \"GF\"\n        },\n        {\n            \"name\": \"French Polynesia\",\n            \"code\": \"PF\"\n        },\n        {\n            \"name\": \"French Southern Territories\",\n            \"code\": \"TF\"\n        },\n        {\n            \"name\": \"Gabon\",\n            \"code\": \"GA\"\n        },\n        {\n            \"name\": \"Gambia\",\n            \"code\": \"GM\"\n        },\n        {\n            \"name\": \"Georgia\",\n            \"code\": \"GE\"\n        },\n        {\n            \"name\": \"Germany\",\n            \"code\": \"DE\"\n        },\n        {\n            \"name\": \"Ghana\",\n            \"code\": \"GH\"\n        },\n        {\n            \"name\": \"Gibraltar\",\n            \"code\": \"GI\"\n        },\n        {\n            \"name\": \"Greece\",\n            \"code\": \"GR\"\n        },\n        {\n            \"name\": \"Greenland\",\n            \"code\": \"GL\"\n        },\n        {\n            \"name\": \"Grenada\",\n            \"code\": \"GD\"\n        },\n        {\n            \"name\": \"Guadeloupe\",\n            \"code\": \"GP\"\n        },\n        {\n            \"name\": \"Guam\",\n            \"code\": \"GU\"\n        },\n        {\n            \"name\": \"Guatemala\",\n            \"code\": \"GT\"\n        },\n        {\n            \"name\": \"Guernsey\",\n            \"code\": \"GG\"\n        },\n        {\n            \"name\": \"Guinea\",\n            \"code\": \"GN\"\n        },\n        {\n            \"name\": \"Guinea-Bissau\",\n            \"code\": \"GW\"\n        },\n        {\n            \"name\": \"Guyana\",\n            \"code\": \"GY\"\n        },\n        {\n            \"name\": \"Haiti\",\n            \"code\": \"HT\"\n        },\n        {\n            \"name\": \"Heard Island and McDonald Islands\",\n            \"code\": \"HM\"\n        },\n        {\n            \"name\": \"Holy See (Vatican City State)\",\n            \"code\": \"VA\"\n        },\n        {\n            \"name\": \"Honduras\",\n            \"code\": \"HN\"\n        },\n        {\n            \"name\": \"Hong Kong\",\n            \"code\": \"HK\"\n        },\n        {\n            \"name\": \"Hungary\",\n            \"code\": \"HU\"\n        },\n        {\n            \"name\": \"Iceland\",\n            \"code\": \"IS\"\n        },\n        {\n            \"name\": \"India\",\n            \"code\": \"IN\"\n        },\n        {\n            \"name\": \"Indonesia\",\n            \"code\": \"ID\"\n        },\n        {\n            \"name\": \"Iran\",\n            \"code\": \"IR\"\n        },\n        {\n            \"name\": \"Iraq\",\n            \"code\": \"IQ\"\n        },\n        {\n            \"name\": \"Ireland\",\n            \"code\": \"IE\"\n        },\n        {\n            \"name\": \"Isle of Man\",\n            \"code\": \"IM\"\n        },\n        {\n            \"name\": \"Israel\",\n            \"code\": \"IL\"\n        },\n        {\n            \"name\": \"Italy\",\n            \"code\": \"IT\"\n        },\n        {\n            \"name\": \"Jamaica\",\n            \"code\": \"JM\"\n        },\n        {\n            \"name\": \"Japan\",\n            \"code\": \"JP\"\n        },\n        {\n            \"name\": \"Jersey\",\n            \"code\": \"JE\"\n        },\n        {\n            \"name\": \"Jordan\",\n            \"code\": \"JO\"\n        },\n        {\n            \"name\": \"Kazakhstan\",\n            \"code\": \"KZ\"\n        },\n        {\n            \"name\": \"Kenya\",\n            \"code\": \"KE\"\n        },\n        {\n            \"name\": \"Kiribati\",\n            \"code\": \"KI\"\n        },\n        {\n            \"name\": \"Democratic People's Republic of Korea\",\n            \"code\": \"KP\"\n        },\n        {\n            \"name\": \"Republic of Korea\",\n            \"code\": \"KR\"\n        },\n        {\n            \"name\": \"Kuwait\",\n            \"code\": \"KW\"\n        },\n        {\n            \"name\": \"Kyrgyzstan\",\n            \"code\": \"KG\"\n        },\n        {\n            \"name\": \"Lao People's Democratic Republic\",\n            \"code\": \"LA\"\n        },\n        {\n            \"name\": \"Latvia\",\n            \"code\": \"LV\"\n        },\n        {\n            \"name\": \"Lebanon\",\n            \"code\": \"LB\"\n        },\n        {\n            \"name\": \"Lesotho\",\n            \"code\": \"LS\"\n        },\n        {\n            \"name\": \"Liberia\",\n            \"code\": \"LR\"\n        },\n        {\n            \"name\": \"Libya\",\n            \"code\": \"LY\"\n        },\n        {\n            \"name\": \"Liechtenstein\",\n            \"code\": \"LI\"\n        },\n        {\n            \"name\": \"Lithuania\",\n            \"code\": \"LT\"\n        },\n        {\n            \"name\": \"Luxembourg\",\n            \"code\": \"LU\"\n        },\n        {\n            \"name\": \"Macao\",\n            \"code\": \"MO\"\n        },\n        {\n            \"name\": \"Macedonia\",\n            \"code\": \"MK\"\n        },\n        {\n            \"name\": \"Madagascar\",\n            \"code\": \"MG\"\n        },\n        {\n            \"name\": \"Malawi\",\n            \"code\": \"MW\"\n        },\n        {\n            \"name\": \"Malaysia\",\n            \"code\": \"MY\"\n        },\n        {\n            \"name\": \"Maldives\",\n            \"code\": \"MV\"\n        },\n        {\n            \"name\": \"Mali\",\n            \"code\": \"ML\"\n        },\n        {\n            \"name\": \"Malta\",\n            \"code\": \"MT\"\n        },\n        {\n            \"name\": \"Marshall Islands\",\n            \"code\": \"MH\"\n        },\n        {\n            \"name\": \"Martinique\",\n            \"code\": \"MQ\"\n        },\n        {\n            \"name\": \"Mauritania\",\n            \"code\": \"MR\"\n        },\n        {\n            \"name\": \"Mauritius\",\n            \"code\": \"MU\"\n        },\n        {\n            \"name\": \"Mayotte\",\n            \"code\": \"YT\"\n        },\n        {\n            \"name\": \"Mexico\",\n            \"code\": \"MX\"\n        },\n        {\n            \"name\": \"Micronesia\",\n            \"code\": \"FM\"\n        },\n        {\n            \"name\": \"Moldova\",\n            \"code\": \"MD\"\n        },\n        {\n            \"name\": \"Monaco\",\n            \"code\": \"MC\"\n        },\n        {\n            \"name\": \"Mongolia\",\n            \"code\": \"MN\"\n        },\n        {\n            \"name\": \"Montenegro\",\n            \"code\": \"ME\"\n        },\n        {\n            \"name\": \"Montserrat\",\n            \"code\": \"MS\"\n        },\n        {\n            \"name\": \"Morocco\",\n            \"code\": \"MA\"\n        },\n        {\n            \"name\": \"Mozambique\",\n            \"code\": \"MZ\"\n        },\n        {\n            \"name\": \"Myanmar\",\n            \"code\": \"MM\"\n        },\n        {\n            \"name\": \"Namibia\",\n            \"code\": \"NA\"\n        },\n        {\n            \"name\": \"Nauru\",\n            \"code\": \"NR\"\n        },\n        {\n            \"name\": \"Nepal\",\n            \"code\": \"NP\"\n        },\n        {\n            \"name\": \"Netherlands\",\n            \"code\": \"NL\"\n        },\n        {\n            \"name\": \"New Caledonia\",\n            \"code\": \"NC\"\n        },\n        {\n            \"name\": \"New Zealand\",\n            \"code\": \"NZ\"\n        },\n        {\n            \"name\": \"Nicaragua\",\n            \"code\": \"NI\"\n        },\n        {\n            \"name\": \"Niger\",\n            \"code\": \"NE\"\n        },\n        {\n            \"name\": \"Nigeria\",\n            \"code\": \"NG\"\n        },\n        {\n            \"name\": \"Niue\",\n            \"code\": \"NU\"\n        },\n        {\n            \"name\": \"Norfolk Island\",\n            \"code\": \"NF\"\n        },\n        {\n            \"name\": \"Northern Mariana Islands\",\n            \"code\": \"MP\"\n        },\n        {\n            \"name\": \"Norway\",\n            \"code\": \"NO\"\n        },\n        {\n            \"name\": \"Oman\",\n            \"code\": \"OM\"\n        },\n        {\n            \"name\": \"Pakistan\",\n            \"code\": \"PK\"\n        },\n        {\n            \"name\": \"Palau\",\n            \"code\": \"PW\"\n        },\n        {\n            \"name\": \"Palestine\",\n            \"code\": \"PS\"\n        },\n        {\n            \"name\": \"Panama\",\n            \"code\": \"PA\"\n        },\n        {\n            \"name\": \"Papua New Guinea\",\n            \"code\": \"PG\"\n        },\n        {\n            \"name\": \"Paraguay\",\n            \"code\": \"PY\"\n        },\n        {\n            \"name\": \"Peru\",\n            \"code\": \"PE\"\n        },\n        {\n            \"name\": \"Philippines\",\n            \"code\": \"PH\"\n        },\n        {\n            \"name\": \"Pitcairn\",\n            \"code\": \"PN\"\n        },\n        {\n            \"name\": \"Poland\",\n            \"code\": \"PL\"\n        },\n        {\n            \"name\": \"Portugal\",\n            \"code\": \"PT\"\n        },\n        {\n            \"name\": \"Puerto Rico\",\n            \"code\": \"PR\"\n        },\n        {\n            \"name\": \"Qatar\",\n            \"code\": \"QA\"\n        },\n        {\n            \"name\": \"RÃ©union\",\n            \"code\": \"RE\"\n        },\n        {\n            \"name\": \"Romania\",\n            \"code\": \"RO\"\n        },\n        {\n            \"name\": \"Russian Federation\",\n            \"code\": \"RU\"\n        },\n        {\n            \"name\": \"Rwanda\",\n            \"code\": \"RW\"\n        },\n        {\n            \"name\": \"Saint Barthelemy\",\n            \"code\": \"BL\"\n        },\n        {\n            \"name\": \"Saint Helena, Ascension and Tristan da Cunha\",\n            \"code\": \"SH\"\n        },\n        {\n            \"name\": \"Saint Kitts and Nevis\",\n            \"code\": \"KN\"\n        },\n        {\n            \"name\": \"Saint Lucia\",\n            \"code\": \"LC\"\n        },\n        {\n            \"name\": \"Saint Martin (French part)\",\n            \"code\": \"MF\"\n        },\n        {\n            \"name\": \"Saint Pierre and Miquelon\",\n            \"code\": \"PM\"\n        },\n        {\n            \"name\": \"Saint Vincent and the Grenadines\",\n            \"code\": \"VC\"\n        },\n        {\n            \"name\": \"Samoa\",\n            \"code\": \"WS\"\n        },\n        {\n            \"name\": \"San Marino\",\n            \"code\": \"SM\"\n        },\n        {\n            \"name\": \"Sao Tome and Principe\",\n            \"code\": \"ST\"\n        },\n        {\n            \"name\": \"Saudi Arabia\",\n            \"code\": \"SA\"\n        },\n        {\n            \"name\": \"Senegal\",\n            \"code\": \"SN\"\n        },\n        {\n            \"name\": \"Serbia\",\n            \"code\": \"RS\"\n        },\n        {\n            \"name\": \"Seychelles\",\n            \"code\": \"SC\"\n        },\n        {\n            \"name\": \"Sierra Leone\",\n            \"code\": \"SL\"\n        },\n        {\n            \"name\": \"Singapore\",\n            \"code\": \"SG\"\n        },\n        {\n            \"name\": \"Sint Maarten (Dutch part)\",\n            \"code\": \"SX\"\n        },\n        {\n            \"name\": \"Slovakia\",\n            \"code\": \"SK\"\n        },\n        {\n            \"name\": \"Slovenia\",\n            \"code\": \"SI\"\n        },\n        {\n            \"name\": \"Solomon Islands\",\n            \"code\": \"SB\"\n        },\n        {\n            \"name\": \"Somalia\",\n            \"code\": \"SO\"\n        },\n        {\n            \"name\": \"South Africa\",\n            \"code\": \"ZA\"\n        },\n        {\n            \"name\": \"South Georgia and the South Sandwich Islands\",\n            \"code\": \"GS\"\n        },\n        {\n            \"name\": \"South Sudan\",\n            \"code\": \"SS\"\n        },\n        {\n            \"name\": \"Spain\",\n            \"code\": \"ES\"\n        },\n        {\n            \"name\": \"Sri Lanka\",\n            \"code\": \"LK\"\n        },\n        {\n            \"name\": \"Sudan\",\n            \"code\": \"SD\"\n        },\n        {\n            \"name\": \"Suriname\",\n            \"code\": \"SR\"\n        },\n        {\n            \"name\": \"Svalbard and Jan Mayen\",\n            \"code\": \"SJ\"\n        },\n        {\n            \"name\": \"Swaziland\",\n            \"code\": \"SZ\"\n        },\n        {\n            \"name\": \"Sweden\",\n            \"code\": \"SE\"\n        },\n        {\n            \"name\": \"Switzerland\",\n            \"code\": \"CH\"\n        },\n        {\n            \"name\": \"Syrian Arab Republic\",\n            \"code\": \"SY\"\n        },\n        {\n            \"name\": \"Taiwan\",\n            \"code\": \"TW\"\n        },\n        {\n            \"name\": \"Tajikistan\",\n            \"code\": \"TJ\"\n        },\n        {\n            \"name\": \"Tanzania\",\n            \"code\": \"TZ\"\n        },\n        {\n            \"name\": \"Thailand\",\n            \"code\": \"TH\"\n        },\n        {\n            \"name\": \"Timor-Leste\",\n            \"code\": \"TL\"\n        },\n        {\n            \"name\": \"Togo\",\n            \"code\": \"TG\"\n        },\n        {\n            \"name\": \"Tokelau\",\n            \"code\": \"TK\"\n        },\n        {\n            \"name\": \"Tonga\",\n            \"code\": \"TO\"\n        },\n        {\n            \"name\": \"Trinidad and Tobago\",\n            \"code\": \"TT\"\n        },\n        {\n            \"name\": \"Tunisia\",\n            \"code\": \"TN\"\n        },\n        {\n            \"name\": \"Turkey\",\n            \"code\": \"TR\"\n        },\n        {\n            \"name\": \"Turkmenistan\",\n            \"code\": \"TM\"\n        },\n        {\n            \"name\": \"Turks and Caicos Islands\",\n            \"code\": \"TC\"\n        },\n        {\n            \"name\": \"Tuvalu\",\n            \"code\": \"TV\"\n        },\n        {\n            \"name\": \"Uganda\",\n            \"code\": \"UG\"\n        },\n        {\n            \"name\": \"Ukraine\",\n            \"code\": \"UA\"\n        },\n        {\n            \"name\": \"United Arab Emirates\",\n            \"code\": \"AE\"\n        },\n        {\n            \"name\": \"United Kingdom\",\n            \"code\": \"GB\"\n        },\n        {\n            \"name\": \"United States\",\n            \"code\": \"US\"\n        },\n        {\n            \"name\": \"United States Minor Outlying Islands\",\n            \"code\": \"UM\"\n        },\n        {\n            \"name\": \"Uruguay\",\n            \"code\": \"UY\"\n        },\n        {\n            \"name\": \"Uzbekistan\",\n            \"code\": \"UZ\"\n        },\n        {\n            \"name\": \"Vanuatu\",\n            \"code\": \"VU\"\n        },\n        {\n            \"name\": \"Venezuela\",\n            \"code\": \"VE\"\n        },\n        {\n            \"name\": \"Vietnam\",\n            \"code\": \"VN\"\n        },\n        {\n            \"name\": \"Virgin Islands, British\",\n            \"code\": \"VG\"\n        },\n        {\n            \"name\": \"Virgin Islands, U.S.\",\n            \"code\": \"VI\"\n        },\n        {\n            \"name\": \"Wallis and Futuna\",\n            \"code\": \"WF\"\n        },\n        {\n            \"name\": \"Western Sahara\",\n            \"code\": \"EH\"\n        },\n        {\n            \"name\": \"Yemen\",\n            \"code\": \"YE\"\n        },\n        {\n            \"name\": \"Zambia\",\n            \"code\": \"ZM\"\n        },\n        {\n            \"name\": \"Zimbabwe\",\n            \"code\": \"ZW\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get App Notifications",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var resp = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"App Notifications\", function () {\r",
+									"\r",
+									"    pm.expect(resp.message).to.eql(\"success\")\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notifications"
+							]
+						},
+						"description": "get states"
+					},
+					"response": [
+						{
+							"name": "Get App Notifications",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/notifications",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"notifications"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1134"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"46e-VeOLfXIy1dFLjmKm1zX9nWjs8w4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 18 Mar 2023 20:58:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"data\": {\n                \"body\": {\n                    \"amount\": 100,\n                    \"source_bank_code\": \"000001\",\n                    \"destination_bank_code\": \"000013\",\n                    \"source_account_number\": \"0092104593\",\n                    \"destination_account_number\": \"0237251706\"\n                },\n                \"title\": \"N100.00 transferred to your account\"\n            },\n            \"created_on\": \"2023-03-18T20:56:23.000Z\"\n        },\n        {\n            \"data\": {\n                \"body\": {\n                    \"amount\": 1245.43,\n                    \"source_bank_code\": \"999232\",\n                    \"destination_bank_code\": \"999232\",\n                    \"source_account_number\": \"0004240405\",\n                    \"destination_account_number\": \"0092104593\"\n                },\n                \"title\": \"N1,245.43 received from AYEGBUSI OLUSINA EMMANUEL\"\n            },\n            \"created_on\": \"2023-03-18T20:54:25.000Z\"\n        },\n        {\n            \"data\": {\n                \"body\": {\n                    \"amount\": 1245.43,\n                    \"source_bank_code\": \"999232\",\n                    \"destination_bank_code\": \"999232\",\n                    \"source_account_number\": \"0004240405\",\n                    \"destination_account_number\": \"0092104593\"\n                },\n                \"title\": \"N1,245.43 received from AYEGBUSI OLUSINA EMMANUEL\"\n            },\n            \"created_on\": \"2023-03-18T20:52:32.000Z\"\n        },\n        {\n            \"data\": {\n                \"body\": {\n                    \"amount\": 1245.43,\n                    \"source_bank_code\": \"999232\",\n                    \"destination_bank_code\": \"999232\",\n                    \"source_account_number\": \"0004240405\",\n                    \"destination_account_number\": \"0092104593\"\n                },\n                \"title\": \"N1,245.43 received from AYEGBUSI OLUSINA EMMANUEL\"\n            },\n            \"created_on\": \"2023-03-18T20:49:38.000Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Merchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 202\", function () {\r",
+									"    pm.response.to.have.status(202);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-org-key",
+								"value": "{{x-org-key}}",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/merchants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"merchants"
+							]
+						},
+						"description": "Updates merchant profile, also update profile on sterling and lendsqr using background service"
+					},
+					"response": [
+						{
+							"name": "Delete Merchant",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-org-key",
+										"value": "{{x-org-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/merchants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"merchants"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://mercator-env.eba-gxqqtsnk.us-east-2.elasticbeanstalk.com",
+			"type": "string"
+		},
+		{
+			"key": "x-org-key",
+			"value": "basic ODkyMTcwOTI1NTAwMDpaSGN3eVhkbDFrMDAw",
+			"type": "string"
+		},
+		{
+			"key": "bearer_token",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiZW1haWwiOiJjaGlnb3ppZUB0ZXN0LmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.0BU9kq9jLhK-N9n0K7Bo9xed2VoZpqfy0OU6MMWFizE",
+			"type": "string"
+		},
+		{
+			"key": "x-api-key",
+			"value": "tE9SzsjKP2gmvsnYriLKIZc2bMgRG2x0eMd4o50A",
+			"type": "string"
+		},
+		{
+			"key": "collection_account_number",
+			"value": ""
+		},
+		{
+			"key": "transaction_reference",
+			"value": ""
+		},
+		{
+			"key": "account_number",
+			"value": ""
+		},
+		{
+			"key": "otp",
+			"value": ""
+		},
+		{
+			"key": "settlement_account_number",
+			"value": ""
+		},
+		{
+			"key": "Auth_token",
+			"value": ""
+		}
+	]
+}
