@@ -1,4 +1,4 @@
-name: Run Postman Collection with Environment
+name: Run Herc Postman Collection with Environment
 
 on:
   push:
@@ -21,5 +21,7 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
-    - name: Run Postman Collection with Environment
-      run: newman run "XSnapCash QA Test.postman_collection.json" -e "New Test - Lendsqr GW.postman_environment.json"
+    - name: Run Herc Postman Collection with Environment
+      run: newman run "Herconomy QA.postman_collection.json" -e "Herconomy API.postman_environment.json"
+
+     
