@@ -1,5 +1,4 @@
-name: Run Herc Postman Collection with Environment
-
+name: Herconomy
 on:
   push:
     branches:
@@ -21,7 +20,7 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
-    - name: Run Herc Postman Collection with Environment
+    - name: Herconomy
       run: newman run "Herconomy QA.postman_collection.json" -e "Herconomy API.postman_environment.json"
 
      
