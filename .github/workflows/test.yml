@@ -1,12 +1,11 @@
-name: Run Postman Environment Collection
-
+name: Herconomy
 on:
   push:
     branches:
       - main  # Change this to your preferred branch
 
 jobs:
-  run-postman-environment:
+  run-postman-collection:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,5 +20,7 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
-    - name: Run Postman Environment Collection
-      run: newman run "Herconomy API.postman_environment.json"
+    - name: Herconomy
+      run: newman run "Herconomy QA.postman_collection.json" -e "Herconomy API.postman_environment.json"
+
+     
